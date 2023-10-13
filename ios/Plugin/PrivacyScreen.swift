@@ -77,8 +77,7 @@ import UIKit
 public extension WKWebView {
     // Cannot be tested in simulator
     func disableScreenshots(imageName: String?) {
-        addSecureText(imageName)
-        addSecureText(imageName)
+//         addSecureText(imageName)
     }
 
     func addSecureText(_ imageName: String?) {
