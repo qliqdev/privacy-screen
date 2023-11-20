@@ -37,9 +37,9 @@ import UIKit
     }
 
     @objc public func handleWillResignActiveNotification() {
-        guard self.isEnabled else {
+         guard self.isEnabled, !self.privacyViewController.isBeingPresented else {
             return
-        }
+         }
         DispatchQueue.main.async {
             self.plugin.bridge?.viewController?.present(self.privacyViewController, animated: false, completion: nil)
         }
