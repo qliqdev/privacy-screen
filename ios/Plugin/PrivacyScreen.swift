@@ -37,19 +37,23 @@ import UIKit
     }
 
     @objc public func handleWillResignActiveNotification() {
-         guard self.isEnabled, !self.privacyViewController.isBeingPresented else {
-            return
-         }
+        guard self.isEnabled else { return }
+
         DispatchQueue.main.async {
-            self.plugin.bridge?.viewController?.present(self.privacyViewController, animated: false, completion: nil)
+            if self.privacyViewController.presentingViewController == nil &&
+                self.plugin.bridge?.viewController?.presentedViewController != self.privacyViewController {
+                self.plugin.bridge?.viewController?.present(self.privacyViewController, animated: false, completion: nil)
+            }
         }
     }
 
-    @objc public func handleDidBecomeActiveNotification() {
-        DispatchQueue.main.async {
-            self.privacyViewController.dismiss(animated: false, completion: nil)
-        }
-    }
+   @objc public func handleDidBecomeActiveNotification() {
+       DispatchQueue.main.async {
+           if self.privacyViewController.presentingViewController != nil {
+               self.privacyViewController.dismiss(animated: false, completion: nil)
+           }
+       }
+   }
 
     @objc public func handleDidChangeStatusBarOrientationNotification() {
         self.plugin.bridge?.webView?.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
